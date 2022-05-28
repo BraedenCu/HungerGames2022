@@ -16,6 +16,8 @@ namespace HungerGames
     {
         protected override Vector2D UserDefinedChooseLocation(VisibleArena arena, bool hare, int organismNumber)
         {
+            //EDITING THIS FILE IS NOT NECESSARY, IT IS FULLY FUNCITONAL THE WAY IT IS BUT REPRESENTS A BONUS FEATURE OF SORTS
+
             // Fill in your decision algorithm here.
             // The organismNumber variable counts from 0 to the total number of organisms.  This can be useful for
             // spreading your organisms out a bit

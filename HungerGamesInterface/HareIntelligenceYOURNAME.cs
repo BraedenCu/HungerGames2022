@@ -11,13 +11,43 @@ namespace HungerGames
 {
     public class HareIntelligenceYOURNAME : HareIntelligence
     {
-        public override Color Color { get { return Color.HotPink; } }
-        public override string Name { get { return "Your Herbivore name"; } }
+        public override Color Color { get { return Color.RosyBrown; } }
+        public override string Name { get { return "dogs"; } }
         public override string BitmapFilename { get { return "default.png"; } }
 
+        public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);
+
+        /*
         public override Turn ChooseTurn()
         { 
             return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
+        }*/
+
+        public override Turn ChooseTurn()
+        {
+            var animals = GetAnimalsSorted().ToList();
+
+
+            Perceptron.Reset();
+
+            Perceptron.AddInput(0, Position.X);
+            Perceptron.AddInput(1, Position.Y);
+            Perceptron.AddInput(2, animals[0].Position.X);
+            Perceptron.AddInput(3, animals[0].Position.Y);
+
+            Perceptron.Run();
+
+            double x = Perceptron.GetOutput(0);
+            double y = Perceptron.GetOutput(1);
+            Vector2D returnMovement = new Vector2D(x, y);
+
+            if (!UtilityFunctions.IsValid(x) || !UtilityFunctions.IsValid(y))
+            {
+                returnMovement = new Vector2D(0, 0);   
+                return ChangeVelocity(returnMovement);
+            }
+
+            return ChangeVelocity(returnMovement);
         }
 
     }
