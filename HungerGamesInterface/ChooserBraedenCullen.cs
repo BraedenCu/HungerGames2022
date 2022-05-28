@@ -12,7 +12,7 @@ using HungerGamesCore.Terrain;
 
 namespace HungerGames
 {
-    public class ChooserYOURNAME : LocationChooserTemplateIntermediate<HareIntelligenceYOURNAME, LynxIntelligenceYOURNAME>
+    public class ChooserBraedenCullen : LocationChooserTemplateIntermediate<HareIntelligenceBraedenCullen, LynxIntelligenceBraedenCullen>
     {
         protected override Vector2D UserDefinedChooseLocation(VisibleArena arena, bool hare, int organismNumber)
         {

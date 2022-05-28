@@ -9,13 +9,15 @@ using System.Linq;
 
 namespace HungerGames
 {
-    public class HareIntelligenceYOURNAME : HareIntelligence
+    public class HareIntelligenceBraedenCullen : HareIntelligence
     {
         public override Color Color { get { return Color.RosyBrown; } }
         public override string Name { get { return "dogs"; } }
         public override string BitmapFilename { get { return "default.png"; } }
 
         public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);
+
+        static string fileNameForSavingBest = Directory.GetCurrentDirectory() + "\\" + "bestPerceptron";
 
         /*
         public override Turn ChooseTurn()
@@ -27,6 +29,9 @@ namespace HungerGames
         {
             var animals = GetAnimalsSorted().ToList();
 
+
+            Perceptron readPerceptron = new Perceptron(fileNameForSavingBest);
+            bestPerceptron = readPerceptron;
 
             Perceptron.Reset();
 

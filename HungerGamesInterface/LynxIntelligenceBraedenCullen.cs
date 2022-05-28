@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HungerGames.Interface
 {
-    public class LynxIntelligenceYOURNAME : LynxIntelligence
+    public class LynxIntelligenceBraedenCullen : LynxIntelligence
     {
         public override Color Color { get { return Color.Black; } }
         public override string Name { get { return "Your Predator name"; } }

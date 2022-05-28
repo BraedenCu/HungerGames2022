@@ -27,7 +27,7 @@ namespace HungerGames
 
             GameMaster master = new GameMaster(arena);
 
-            master.AddChooser(new ChooserYOURNAME());
+            master.AddChooser(new ChooserBraedenCullen());
             master.AddChooser(new ChooserDefault());
 
             master.AddAllAnimals(nHare, nLynx);
