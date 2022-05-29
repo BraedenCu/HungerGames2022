@@ -14,7 +14,7 @@ namespace HungerGames
     {
         public override Color Color { get { return Color.RosyBrown; } }
         public override string Name { get { return "MyHares"; } }
-        public override string BitmapFilename { get { return "default.png"; } }
+        public override string BitmapFilename { get { return "pink.png"; } }
 
         public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);
 
