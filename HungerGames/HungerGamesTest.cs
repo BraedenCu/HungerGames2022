@@ -108,13 +108,13 @@ namespace HungerGames
 
             Console.WriteLine("entering training loop");
             //bestPerceptron = getBestHarePerceptron();
-            bestPerceptron = getBestPerceptron(RunArenaHare, "MyHare", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
+            bestPerceptron = getBestPerceptron(RunArenaHare, "MyHares", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
             lastBestHareScore = bestTimes[0];
             //bestLynxPerceptron = getBestLynxPerceptron();
             //bestLynxPerceptron = getBestPerceptron(RunArenaHare, "Lynx", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
             //lastBestLynxScore = bestTimes[0];
 
-            /*
+            /*  
             while (bestHareLynxScore > lastBestLynxScore || bestHareLynxScore > lastBestHareScore)
             {
                 Console.WriteLine("Best Hare Score:" + bestHareLynxScore + "\tLast Hare Score:" + lastBestLynxScore);
@@ -169,6 +169,7 @@ namespace HungerGames
                 newPerceptron.RandomWeights(InitalStandardDeviation);
 
                 score = RunArena(arena, newPerceptron, bestLynxPerceptron, maxRunTime);
+                score = RunArena(arena, newPerceptron, newPerceptron, maxRunTime);
 
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
 
@@ -309,7 +310,9 @@ namespace HungerGames
                 // Here is where you do stuff to the Perceptron
                 newPerceptron.RandomWeights(InitalStandardDeviation);
 
-                score = RunArena(arena, bestPerceptron, newPerceptron);
+                //TODO -> fix the below issue
+                score = runArenaCall(arena, newPerceptron);
+                //score = RunArena(arena, bestPerceptron, newPerceptron);
 
                 Console.WriteLine("SCORE: " + score);
                 
@@ -365,7 +368,7 @@ namespace HungerGames
         static private double RunArenaLynx(HungerGamesArena arena, Perceptron newPerceptronToRun)
         {
 
-            return RunArena(arena, bestPerceptron, newPerceptronToRun, 300);
+            return RunArena(arena, bestPerceptron, newPerceptronToRun, maxRunTime);
         }
 
         static private double RunArenaHare(HungerGamesArena arena, Perceptron newPerceptronToRun)
@@ -374,7 +377,7 @@ namespace HungerGames
         }
         static private double RunArena(HungerGamesArena arena, Perceptron harePerceptron, Perceptron lynxPerceptron)
         {
-            return RunArena(arena, harePerceptron, lynxPerceptron, 300);
+            return RunArena(arena, harePerceptron, lynxPerceptron, maxRunTime);
         }
 
         //all slots have contain a Perceptron
@@ -399,7 +402,7 @@ namespace HungerGames
                     Console.WriteLine("New Top Score:" + score + " Added to Index:" + i);
                     bestTimes[i] = score;
                     topPreceptrons[i] = perceptronIn.Clone();
-                    //PrintWeights(perceptronIn);
+                    PrintWeights(perceptronIn);
                     //PrintWeights(topPreceptrons[i]);                    
                     return true;
                 }
@@ -460,6 +463,7 @@ namespace HungerGames
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
 
+            //TODO -> figure out why this loop is taking so long
             while (keepRunning && arena.CountObjects("MyHares") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
             {
