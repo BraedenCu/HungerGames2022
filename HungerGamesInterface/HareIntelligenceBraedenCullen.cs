@@ -13,7 +13,7 @@ namespace HungerGames
     public class HareIntelligenceBraedenCullen : HareIntelligence
     {
         public override Color Color { get { return Color.RosyBrown; } }
-        public override string Name { get { return "dogs"; } }
+        public override string Name { get { return "MyHares"; } }
         public override string BitmapFilename { get { return "default.png"; } }
 
         public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);

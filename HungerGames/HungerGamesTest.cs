@@ -441,8 +441,8 @@ namespace HungerGames
         {
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
-            Console.WriteLine("Number of hares: " + arena.CountObjects("Hare"));
-            while (keepRunning && arena.CountObjects("Hare") > 0 && arena.Time < MaxRuntime)
+            Console.WriteLine("Number of hares: " + arena.CountObjects("MyHares"));
+            while (keepRunning && arena.CountObjects("MyHares") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.CountObjects("Lynx") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
             {
@@ -459,7 +459,7 @@ namespace HungerGames
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
 
-            while (keepRunning && arena.CountObjects("Hare") > 0 && arena.Time < MaxRuntime)
+            while (keepRunning && arena.CountObjects("MyHares") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
             {
                 arena.Tick(arena.Time + 1);
