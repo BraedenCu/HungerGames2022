@@ -297,7 +297,7 @@ namespace HungerGames
             bestTimes = new double[numberOfTopPerceptronsToStore];
 
             double bestScore = 0;
-            int numberOfTrainingRuns = 1000;
+            int numberOfTrainingRuns = 100;
             int InitalStandardDeviation = 6;
             double score = 0.0;
 
@@ -313,17 +313,18 @@ namespace HungerGames
 
                 score = RunArena(arena, bestPerceptron, newPerceptron);
                 Console.WriteLine("SCORE: " + score);
+                Console.WriteLine(i);
 
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
 
                 if (i == numberOfTrainingRuns - 1)
                 {
-                    if (!isTopScoresFound())
+                    if (!isTopScoresFound() && false)
                     {
                         InitalStandardDeviation++;
                         Console.WriteLine("Most Recent Score: " + score);
                         Console.WriteLine("Increasing Stadard Deviation to:" + InitalStandardDeviation);
-                        i = i - 1000;
+                        i = i - 100;
                     }
                 }
             }
