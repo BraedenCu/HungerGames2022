@@ -25,7 +25,7 @@ namespace HungerGames
         {
             WPFUtility.ConsoleManager.ShowConsoleWindow();
             Console.WriteLine("RUNNING LOOP");
-            bool training = false;
+            bool training = true;
 
             if(training)
             {
@@ -92,8 +92,8 @@ namespace HungerGames
 
 
         //homework 10 copy paste -> work for training in homework ten
-        static private Perceptron bestPerceptron = new Perceptron(4, 2);//Hare
-        static private Perceptron bestLynxPerceptron = new Perceptron(4, 2);
+        static private Perceptron bestPerceptron = new Perceptron(5, 3);//Hare
+        static private Perceptron bestLynxPerceptron = new Perceptron(5, 3);
 
         static private void RunWithTraining()
         {
@@ -115,8 +115,8 @@ namespace HungerGames
             bestPerceptron = getBestPerceptron(RunArenaHare, "Hare", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
             lastBestHareScore = bestTimes[0];
             //bestLynxPerceptron = getBestLynxPerceptron();
-            bestLynxPerceptron = getBestPerceptron(RunArenaHare, "Lynx", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
-            lastBestLynxScore = bestTimes[0];
+            //bestLynxPerceptron = getBestPerceptron(RunArenaHare, "Lynx", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
+            //lastBestLynxScore = bestTimes[0];
 
             while (bestHareLynxScore > lastBestLynxScore || bestHareLynxScore > lastBestHareScore)
             {
@@ -126,8 +126,8 @@ namespace HungerGames
                 lastBestHareScore = bestHareLynxScore;
                 bestPerceptron = getBestPerceptron(RunArenaHare, "Hare", bestPerceptron);
                 lastBestHareScore = bestTimes[0];
-                bestLynxPerceptron = getBestPerceptron(RunArenaHare, "Lynx", bestLynxPerceptron);
-                lastBestLynxScore = bestTimes[0];
+                //bestLynxPerceptron = getBestPerceptron(RunArenaHare, "Lynx", bestLynxPerceptron);
+                //lastBestLynxScore = bestTimes[0];
             }
 
             /*while(bestHareLynxScore>lastBestLynxScore || bestHareLynxScore>lastBestHareScore){
