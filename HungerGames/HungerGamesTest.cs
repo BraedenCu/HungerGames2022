@@ -25,7 +25,7 @@ namespace HungerGames
         {
             WPFUtility.ConsoleManager.ShowConsoleWindow();
             Console.WriteLine("RUNNING LOOP");
-            bool training = true;
+            bool training = false;
 
             if(training)
             {
