@@ -92,8 +92,8 @@ namespace HungerGames
 
 
         //homework 10 copy paste -> work for training in homework ten
-        static private Perceptron bestPerceptron = new Perceptron(4, 4);//Hare
-        static private Perceptron bestLynxPerceptron = new Perceptron(4, 4);
+        static private Perceptron bestPerceptron = new Perceptron(4, 2);//Hare
+        static private Perceptron bestLynxPerceptron = new Perceptron(4, 2);
 
         static private void RunWithTraining()
         {
@@ -312,7 +312,8 @@ namespace HungerGames
                 newPerceptron.RandomWeights(InitalStandardDeviation);
 
                 score = RunArena(arena, bestPerceptron, newPerceptron);
-                
+                Console.WriteLine("SCORE: " + score);
+
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
 
                 if (i == numberOfTrainingRuns - 1)
@@ -440,12 +441,12 @@ namespace HungerGames
         {
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
-
-            //while (keepRunning && arena.CountObjects("Hare") > 0 && arena.Time < MaxRuntime)
-            while (keepRunning && arena.CountObjects("Lynx") > 0 && arena.Time < MaxRuntime)
+            Console.WriteLine("Number of hares: " + arena.CountObjects("Hare"));
+            while (keepRunning && arena.CountObjects("Hare") > 0 && arena.Time < MaxRuntime)
+            //while (keepRunning && arena.CountObjects("Lynx") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
             {
-                arena.Tick(arena.Time + 1);
+                arena.Tick(arena.Time += 1);
             }
 
             //return arena.CountObjects("Hare");
@@ -491,6 +492,11 @@ namespace HungerGames
         static private void AddPerceptrons(HungerGamesArena arena, Perceptron perceptron, Perceptron perceptronLynx)
         {
             foreach (var animal in arena.GetObjectsOfType<Hare>())
+            {
+                animal.Perceptron = perceptron.Clone();
+                //Console.WriteLine("should be running");
+            }
+            foreach (var animal in arena.GetObjectsOfType<Lynx>())
             {
                 animal.Perceptron = perceptron.Clone();
                 //Console.WriteLine("should be running");

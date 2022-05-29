@@ -11,6 +11,10 @@ namespace HungerGames.Animals
 {
     abstract public class Lynx : Animal
     {
+
+        public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);
+
+
         static private readonly AnimalStats lynxStats = new AnimalStats()
         {
             BaseWalkingVolume = 5e-8,
