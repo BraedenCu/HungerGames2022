@@ -5,14 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Arena;
 using DongUtility;
+using HungerGames;
 using HungerGames.Interface;
 using HungerGamesCore.Interface;
 using HungerGamesCore.Terrain;
+using HungerGames;
 
 namespace HungerGames.Animals
 {
     abstract public class Hare : Animal
     {
+        //perceptron given to each hare during TRAINING PROCESS
+        //TODO test without this code because dong wont have it when running the simulation
+
         static private readonly AnimalStats hareStats = new AnimalStats()
         {
             BaseWalkingVolume = 1e-8,

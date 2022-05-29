@@ -31,7 +31,6 @@ namespace HungerGames
 
 
             Perceptron readPerceptron = new Perceptron(fileNameForSavingBest);
-            bestPerceptron = readPerceptron;
 
             Perceptron.Reset();
 
