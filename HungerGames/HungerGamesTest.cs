@@ -491,7 +491,8 @@ namespace HungerGames
         {
             foreach (var animal in arena.GetObjectsOfType<Hare>())
             {
-                animal.Perceptron = perceptron.Clone();
+                //animal.Perceptron = perceptron.Clone();
+                Console.WriteLine("should be running");
             }
         }
     }
