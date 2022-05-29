@@ -6,6 +6,7 @@ using HungerGamesCore.Terrain;
 using System;
 using System.Drawing;
 using System.Linq;
+using HungerGames.Animals;
 
 namespace HungerGames
 {

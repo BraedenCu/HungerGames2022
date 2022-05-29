@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace HungerGames
+namespace HungerGames.Animals
 {
     public class Perceptron
     {

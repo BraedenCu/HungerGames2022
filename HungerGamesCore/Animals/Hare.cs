@@ -17,6 +17,7 @@ namespace HungerGames.Animals
     {
         //perceptron given to each hare during TRAINING PROCESS
         //TODO test without this code because dong wont have it when running the simulation
+        public Perceptron Perceptron { get; set; } = new Perceptron(4, 2);
 
         static private readonly AnimalStats hareStats = new AnimalStats()
         {

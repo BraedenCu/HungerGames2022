@@ -110,8 +110,8 @@ namespace HungerGames
             double bestHareLynxScore = 0;
 
 
+            Console.WriteLine("entering training loop");
             //bestPerceptron = getBestHarePerceptron();
-
             bestPerceptron = getBestPerceptron(RunArenaHare, "Hare", new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count));
             lastBestHareScore = bestTimes[0];
             //bestLynxPerceptron = getBestLynxPerceptron();
@@ -288,7 +288,7 @@ namespace HungerGames
         }
 
         static Perceptron bestGenericPerc;
-        //
+
         static private Perceptron getBestPerceptron(Func<HungerGamesArena, Perceptron, double> runArenaCall, String type, Perceptron startingPerceptron)
         {
             Console.Write("**Training " + type + "**");
@@ -312,7 +312,7 @@ namespace HungerGames
                 newPerceptron.RandomWeights(InitalStandardDeviation);
 
                 score = RunArena(arena, bestPerceptron, newPerceptron);
-
+                
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
 
                 if (i == numberOfTrainingRuns - 1)
@@ -320,6 +320,7 @@ namespace HungerGames
                     if (!isTopScoresFound())
                     {
                         InitalStandardDeviation++;
+                        Console.WriteLine("Most Recent Score: " + score);
                         Console.WriteLine("Increasing Stadard Deviation to:" + InitalStandardDeviation);
                         i = i - 1000;
                     }
@@ -491,8 +492,8 @@ namespace HungerGames
         {
             foreach (var animal in arena.GetObjectsOfType<Hare>())
             {
-                //animal.Perceptron = perceptron.Clone();
-                Console.WriteLine("should be running");
+                animal.Perceptron = perceptron.Clone();
+                //Console.WriteLine("should be running");
             }
         }
     }
