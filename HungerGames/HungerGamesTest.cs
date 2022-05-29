@@ -493,14 +493,21 @@ namespace HungerGames
         {
             foreach (var animal in arena.GetObjectsOfType<Hare>())
             {
-                animal.Perceptron = perceptron.Clone();
+                //only add perceptron to MyHares
+                if(animal.Name == "MyHare")
+                {
+                    Console.WriteLine("updating hare perceptron");
+                    animal.Perceptron = perceptron.Clone();
+                }
                 //Console.WriteLine("should be running");
             }
+            /*
             foreach (var animal in arena.GetObjectsOfType<Lynx>())
             {
-                animal.Perceptron = perceptron.Clone();
+                animal.Perceptron = perceptronLynx.Clone();
                 //Console.WriteLine("should be running");
             }
+            */
         }
     }
 }
