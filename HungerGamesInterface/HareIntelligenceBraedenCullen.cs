@@ -7,6 +7,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using HungerGames.Animals;
+using HungerGamesCore.Interface;
 
 namespace HungerGames
 {
@@ -32,17 +33,27 @@ namespace HungerGames
         public override Turn ChooseTurn()
         {
             var animals = GetAnimalsSorted().ToList();
-            var nearestLynx = animals[0];
-
-            foreach(var ani in animals)
+            //TODO defect check animals not null
+            VisibleAnimal nearestLynx = animals[0];
+            /*
+            bool lynxFound = false;
+            foreach (var ani in animals)
             {
-                if(ani.IsLynx == true)
+                if (ani.IsLynx == true)
                 {
+                    lynxFound = true;
                     nearestLynx = ani;
                 }
             }
-            Perceptron.Reset();
+            if (animals == null || animals.Count() < 1 || lynxFound == false)
+            {
+                //nearestLynx = null;
+                return Wait();
+            }
+            */
 
+
+            Perceptron.Reset();
             //position of current hare
             //distance too nearest lynx
             //distance to nearest bush
@@ -53,7 +64,9 @@ namespace HungerGames
             Perceptron.AddInput(2, nearestLynx.Position.X);
             Perceptron.AddInput(3, nearestLynx.Position.Y);
             Perceptron.AddInput(4, Stamina);
-            
+            //adding one more imput for attacking state -> TODO check the distance from the DIRECTION OF VELOCITY to the hare, like to see if the hare is being targetted
+            //nearestLynx.Velocity.Magnitude
+
             Perceptron.Run();
 
             /*
@@ -68,7 +81,7 @@ namespace HungerGames
             }
 
             return ChangeVelocity(returnMovement);
-            */
+            */ 
 
             double move = Perceptron.GetOutput(0);
             double hide = Perceptron.GetOutput(1);
@@ -80,20 +93,38 @@ namespace HungerGames
             }
             else if (hide == UtilityFunctions.Max(move, hide, wait))
             {
-                Hide();
+                return Hide();
             }
             return Wait();
         }
 
         public Turn Hide()
         {
-            //return ChangeVelocity(Vector2D.PolarVector(0, 0));
-            return DefaultMovementAwayFromLynx();
+            return ChangeVelocity(Vector2D.PolarVector(0, 0));
+            VisibleObstacle closestGrass = null;
+            double bestDistance = -1;
+            foreach (var obstacle in GetObstacles<Grass>().ToList())
+            {
+                double distance = Vector2D.Distance2(obstacle.Position, Position);
+                if (closestGrass == null || bestDistance == -1 || distance < bestDistance)
+                {
+                    closestGrass = obstacle;
+                }
+            }
+            if(closestGrass != null)
+            {
+                Vector2D direction = closestGrass.Position - Position;
+                return ChangeVelocity(-direction * 2); //*5
+            }
+            else
+            {
+                return DefaultMovementAwayFromLynx();
+            }
         }
 
         public Turn DefaultMovementAwayFromLynx()
         {
-            const double distanceLimit2 = 25;
+            const double distanceLimit2 = 10; //default 25 5
 
             var animals = GetAnimalsSorted().ToList();
             foreach (var ani in animals)
@@ -101,11 +132,14 @@ namespace HungerGames
                 if (ani.IsLynx && Vector2D.Distance2(Position, ani.Position) < distanceLimit2)
                 {
                     Vector2D direction = ani.Position - Position;
-                    return ChangeVelocity(-direction * 5);
+                    double distance = Vector2D.Distance2(ani.Position, Position);
+                    double velocity = 10 / (distance / 2);
+                    //Console.WriteLine("Distance: " + distance + "  velocity: " + velocity);
+                    return ChangeVelocity(-direction * velocity); //default 5 
                 }
             }
-
-            return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
+            return Wait();
+            //return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
         }
 
         public Turn Wait()

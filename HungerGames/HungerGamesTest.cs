@@ -27,15 +27,24 @@ namespace HungerGames
             Console.WriteLine("RUNNING LOOP");
             bool training = true;
 
-            if(training)
-            {
-                RunWithTraining();
-                return;
-            }
-
             HungerGamesArena arena = new HungerGamesArena(arenaWidth, arenaHeight);
 
             GameMaster master = new GameMaster(arena);
+
+            if (training)
+            {
+                arena = new HungerGamesArena(arenaWidth, arenaHeight);
+
+                master = new GameMaster(arena);
+
+                master.AddChooser(new ChooserBraedenCullen());
+                master.AddChooser(new ChooserDefault());
+
+                master.AddAllAnimals(nHare, nLynx);
+
+                RunWithTraining();
+                return;
+            }
 
             master.AddChooser(new ChooserBraedenCullen());
             master.AddChooser(new ChooserDefault());
@@ -94,6 +103,7 @@ namespace HungerGames
         static private void RunWithTraining()
         {
             Process();
+            Display();
         }
 
         static private void Process()
@@ -141,150 +151,10 @@ namespace HungerGames
         }
 
         const int numberOfTopPerceptronsToStore = 5;
-        const int maxRunTime = 200;
+        const int maxRunTime = 4000;
         static Perceptron[] topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
         static double[] bestTimes = new double[numberOfTopPerceptronsToStore];
 
-        static private Perceptron getBestHarePerceptron()
-        {
-            Console.WriteLine("**Training Hares**");
-            double bestScore = 0;
-            int numberOfTrainingRuns = 1000;
-            int InitalStandardDeviation = 6;
-            double score = 0.0;
-            //Perceptron bestHarePerceptron = bestPerceptron.Clone();
-            topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
-            bestTimes = new double[numberOfTopPerceptronsToStore];
-
-            var arena = SetupArena();
-            int generations = 1;
-            for (int i = 0; i < numberOfTrainingRuns; i++)
-            {
-
-                arena = SetupArena();
-
-                var newPerceptron = new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count);
-
-                // Here is where you do stuff to the Perceptron
-                newPerceptron.RandomWeights(InitalStandardDeviation);
-
-                score = RunArena(arena, newPerceptron, bestLynxPerceptron, maxRunTime);
-                score = RunArena(arena, newPerceptron, newPerceptron, maxRunTime);
-
-                UpdateBestPerceptronsGreatThen(newPerceptron, score);
-
-                if (i == numberOfTrainingRuns - 1)
-                {
-                    if (!isTopScoresFound())
-                    {
-                        InitalStandardDeviation++;
-                        Console.WriteLine("Increasing Stadard Deviation to:" + InitalStandardDeviation);
-                        i = i - 1000;
-                    }
-                }
-            }
-            Console.WriteLine("Final Standard Dev Used:" + InitalStandardDeviation);
-            Console.WriteLine("Best Hare Score:" + score);
-
-
-            double fineStandarDeviation = .5;
-            double lastBestTopScore = bestTimes[0] - .5;//-.5 so it does at least 1 generation
-            while (bestTimes[0] > lastBestTopScore)
-            {
-                lastBestTopScore = bestTimes[0];
-                generations++;
-                foreach (var topHarePerc in topPreceptrons)
-                {
-                    for (int i = 0; i < 100; i++)
-                    {
-                        Perceptron testPerceptron = topHarePerc.RandomClone(fineStandarDeviation);
-                        arena = SetupArena();
-                        score = RunArena(arena, testPerceptron, bestLynxPerceptron, maxRunTime);
-                        //Console.WriteLine("Fine Tuned Hare Score:"+score);
-                        UpdateBestPerceptronsGreatThen(testPerceptron, score);
-                    }
-                }
-            }
-            Console.WriteLine("Final Best Hare Top Score:" + bestTimes[0]);
-            Console.WriteLine("Number Of Generation:" + generations);
-
-            arena = SetupArena();
-            Console.WriteLine("Reran best and scored:" + RunArena(arena, topPreceptrons[0], bestLynxPerceptron, maxRunTime));
-            //PrintWeights(topPreceptrons[0]);
-            //memory is being eaten up... suggestion from stack overflow
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            //TODO possibly check the best again to make sure they are reliable?
-            return topPreceptrons[0];
-        }
-
-        static private Perceptron getBestLynxPerceptron()
-        {
-            Console.Write("**Training Lynx**");
-            topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
-            bestTimes = new double[numberOfTopPerceptronsToStore];
-
-            double bestScore = 0;
-            int numberOfTrainingRuns = 1000;
-            int InitalStandardDeviation = 6;
-            double score = 0.0;
-
-            var arena = SetupArena();
-            for (int i = 0; i < numberOfTrainingRuns; i++)
-            {
-                arena = SetupArena();
-
-                var newPerceptron = new Perceptron(bestPerceptron.InputNodes.Count, bestPerceptron.OutputNodes.Count);
-
-                // Here is where you do stuff to the Perceptron
-                newPerceptron.RandomWeights(InitalStandardDeviation);
-
-                score = RunArena(arena, bestPerceptron, newPerceptron, maxRunTime);
-
-                UpdateBestPerceptronsGreatThen(newPerceptron, score);
-
-                if (i == numberOfTrainingRuns - 1)
-                {
-                    if (!isTopScoresFound())
-                    {
-                        InitalStandardDeviation++;
-                        Console.WriteLine("Increasing Stadard Deviation to:" + InitalStandardDeviation);
-                        i = i - 1000;
-                    }
-                }
-            }
-            Console.WriteLine("Final Standard Dev Used:" + InitalStandardDeviation);
-            Console.WriteLine("Best Lynx Score:" + score);
-
-            int generations = 1;
-            double fineStandarDeviation = .5;
-            double lastBestTopScore = bestTimes[0] - .5;//-.5 so it does at least 1 generation
-            while (bestTimes[0] > lastBestTopScore)
-            {
-                lastBestTopScore = bestTimes[0];
-                generations++;
-                foreach (var topLynxPerc in topPreceptrons)
-                {
-                    for (int i = 0; i < 100; i++)
-                    {
-                        Perceptron testPerceptron = topLynxPerc.RandomClone(fineStandarDeviation);
-                        arena = SetupArena();
-                        score = RunArena(arena, testPerceptron, bestPerceptron, maxRunTime);
-                        UpdateBestPerceptronsGreatThen(testPerceptron, score);
-                    }
-                }
-            }
-            Console.WriteLine("Final Best Lynx Top Score:" + bestTimes[0]);
-            Console.WriteLine("Number Of Generation:" + generations);
-            arena = SetupArena();
-            Console.WriteLine("Reran best and scored:" + RunArena(arena, bestPerceptron, topPreceptrons[0], maxRunTime));
-            //PrintWeights(topPreceptrons[0]);
-            //memory is being eaten up... suggestion from stack overflow
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            //TODO possibly check the best again to make sure they are reliable?
-            return topPreceptrons[0];
-        }
 
         static Perceptron bestGenericPerc;
 
@@ -296,7 +166,7 @@ namespace HungerGames
             bestTimes = new double[numberOfTopPerceptronsToStore];
 
             double bestScore = 0;
-            int numberOfTrainingRuns = 100;
+            int numberOfTrainingRuns = 10;
             int InitalStandardDeviation = 6;
             double score = 0.0;
             
@@ -316,8 +186,6 @@ namespace HungerGames
 
                 Console.WriteLine("SCORE: " + score);
                 
-                Console.WriteLine(i);
-
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
 
                 if (i == numberOfTrainingRuns - 1)
@@ -327,12 +195,15 @@ namespace HungerGames
                         InitalStandardDeviation++;
                         Console.WriteLine("Most Recent Score: " + score);
                         Console.WriteLine("Increasing Stadard Deviation to:" + InitalStandardDeviation);
-                        i = i - 100;
+                        i = i - 3;
                     }
                 }
             }
             Console.WriteLine("Final Standard Dev Used:" + InitalStandardDeviation);
             Console.WriteLine("Best Score:" + bestTimes[0]);
+
+            //TODO change this to a different situation so its not just returning the first thing it finds
+            return topPreceptrons[0];
 
             int generations = 1;
             double fineStandarDeviation = .5;
@@ -391,6 +262,8 @@ namespace HungerGames
             return true;
         }
 
+
+        //TODO review the below function. minimal score and bestTimes[i] < score only works for lynxes -> optimizing decreasing the score
         static bool UpdateBestPerceptronsGreatThen(Perceptron perceptronIn, double score)
         {
             int minimalScore = 100;
@@ -407,6 +280,7 @@ namespace HungerGames
                     return true;
                 }
             }
+            //return true;
             return false;
         }
 
@@ -445,7 +319,7 @@ namespace HungerGames
         {
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
-            Console.WriteLine("Number of hares: " + arena.CountObjects("MyHares"));
+            //Console.WriteLine("Number of hares: " + arena.CountObjects("MyHares"));
             while (keepRunning && arena.CountObjects("MyHares") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.CountObjects("Lynx") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
@@ -462,12 +336,21 @@ namespace HungerGames
         {
             AddPerceptrons(arena, harePerceptron, lynxPerceptron);
             bool keepRunning = true;
+            var myHares = arena.GetObjects("MyHares");
 
             //TODO -> figure out why this loop is taking so long
             while (keepRunning && arena.CountObjects("MyHares") > 0 && arena.Time < MaxRuntime)
             //while (keepRunning && arena.Time < totalTime)
             {
+                myHares = arena.GetObjects("MyHares");
                 arena.Tick(arena.Time + 1);
+            }
+
+            if (arena.GetObjects("Default Hare").Count() > myHares.Count())
+            {
+                Console.WriteLine("Time before discarding:  " + arena.Time);
+                Console.WriteLine("**Discarding time since my hares did not do better than the default hares");
+                return 0;
             }
 
             //return arena.CountObjects("Hare");
@@ -476,23 +359,31 @@ namespace HungerGames
         }
 
 
-        /*
+        
         static private void Display()
         {
-            var arena = SetupArena();
+
+            HungerGamesArena arena = new HungerGamesArena(arenaWidth, arenaHeight);
+            GameMaster master = new GameMaster(arena);
+
+            master.AddChooser(new ChooserBraedenCullen());
+            master.AddChooser(new ChooserDefault());
+
+            master.AddAllAnimals(nHare, nLynx);
+
             AddPerceptrons(arena, bestPerceptron, bestLynxPerceptron);
 
-            var sim = new EcologySim(arena);
-            sim.TimePerTurn = .1;
 
-            sim.Arena.Manager.AddGraph(new List<TimelineInfo>()
-            { new TimelineInfo(new TimelinePrototype("Hare", Color.SandyBrown), new BasicFunctionPair(() => arena.Time, () => arena.GetObjectsOfType<Hare>().Count())),
-            new TimelineInfo(new TimelinePrototype("Lynx", Color.PaleVioletRed), new BasicFunctionPair(() => arena.Time, () => arena.GetObjectsOfType<Lynx>().Count()))
-            }, "Time (days)", "Population");
+            var sim = new HungerGamesTestWindow(arena);
+
+            sim.Manager.AddLeaderBoard(GetLeaderBars(master, true),
+                () => GetLeaderBoardScores(arena, master));
+            sim.Manager.AddLeaderBoard(GetLeaderBars(master, false),
+                () => GetLynxScores(arena, master));
 
             sim.Show();
         }
-        */
+        
 
         static private void AddPerceptrons(HungerGamesArena arena, Perceptron perceptron, Perceptron perceptronLynx)
         {
