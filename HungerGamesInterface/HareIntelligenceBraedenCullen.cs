@@ -35,7 +35,15 @@ namespace HungerGames
             var animals = GetAnimalsSorted().ToList();
             //TODO defect check animals not null
             VisibleAnimal nearestLynx = animals[0];
-            
+
+            double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
+            var sounds = Listen().ToList();
+            if (sounds.Count > 0 && sounds[0].SoundCode == 191)
+            {
+                //Console.WriteLine("vocalizing");
+                return Vocalize(10, 192);
+            }
+
             bool lynxFound = false;
             foreach (var ani in animals)
             {
@@ -49,13 +57,6 @@ namespace HungerGames
             {
                 //nearestLynx = null;
                 return Wait();
-            }
-
-            double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
-            var sounds = Listen().ToList();
-            if (sounds.Count > 0 && sounds[0].SoundCode == 192)
-            {
-                return Vocalize(10, 192);
             }
 
             Perceptron.Reset();

@@ -18,6 +18,8 @@ namespace HungerGames.Interface
         //list of animal ids that i save
         static List<int> IDs = new List<int>();
         static List<int> badIDs = new List<int>();
+        static List<int> codes = new List<int>();
+        static int myHaresId = -1;
 
         public override Turn ChooseTurn()
         {
@@ -27,11 +29,18 @@ namespace HungerGames.Interface
                 var sounds = Listen().ToList();
                 if (sounds.Count > 0 && sounds[0].SoundCode == 192)
                 {
+                    Console.WriteLine(myHaresId);
+                    if (myHaresId == -1)
+                    {
+                        myHaresId = animals[0].Species;
+                    }
                     IDs.Add(animals[0].ID);
                     //badIDs.Remove(ani.ID);
                 }
+
                 foreach (var ani in animals)
                 {
+                    /*
                     if (!IDs.Contains(ani.ID))
                     {
                         if (!ani.IsLynx)
@@ -51,6 +60,27 @@ namespace HungerGames.Interface
 
                             return ChangeVelocity(direction.UnitVector() * 4);
                         }
+                    }*/
+                    if (!ani.IsLynx)
+                    {
+                        if(ani.Species == myHaresId)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Vector2D direction = ani.Position - Position;
+                            double distance = Vector2D.Distance2(ani.Position, Position);
+                            if (distance < 3 && myHaresId == -1)
+                            {
+                                return Vocalize(10, 191);
+                            }
+                            else
+                            {
+                                return ChangeVelocity(direction.UnitVector() * 4);
+                            }
+                        }
+                        //return ChangeVelocity(direction.UnitVector() * 4);
                     }
                 }
             }
