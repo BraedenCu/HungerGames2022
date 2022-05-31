@@ -35,13 +35,12 @@ namespace HungerGames
             var animals = GetAnimalsSorted().ToList();
             //TODO defect check animals not null
             VisibleAnimal nearestLynx = animals[0];
-
             double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
             var sounds = Listen().ToList();
             if (sounds.Count > 0 && sounds[0].SoundCode == 191)
             {
                 //Console.WriteLine("vocalizing");
-                return Vocalize(10, 192);
+                return Vocalize(5, 192);
             }
 
             bool lynxFound = false;
@@ -109,7 +108,8 @@ namespace HungerGames
             return ChangeVelocity(Vector2D.PolarVector(0, 0));
             VisibleObstacle closestGrass = null;
             double bestDistance = -1;
-            foreach (var obstacle in GetObstacles<Grass>().ToList())
+            //TODO find best obstacle to use
+            foreach (var obstacle in GetObstacles<Shrub>().ToList())
             {
                 double distance = Vector2D.Distance2(obstacle.Position, Position);
                 if (closestGrass == null || bestDistance == -1 || distance < bestDistance)

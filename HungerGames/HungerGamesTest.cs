@@ -151,7 +151,7 @@ namespace HungerGames
         }
 
         const int numberOfTopPerceptronsToStore = 1;
-        const int maxRunTime = 2000;
+        const int maxRunTime = 15000;
         static Perceptron[] topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
         static double[] bestTimes = new double[numberOfTopPerceptronsToStore];
 
@@ -187,10 +187,12 @@ namespace HungerGames
                 Console.WriteLine("SCORE: " + score);
                 
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
+                //TODO change this to a different situation so its not just returning the first thing it finds
+                return topPreceptrons[0];
 
                 if (i == numberOfTrainingRuns - 1)
                 {
-                    if (!isTopScoresFound() && false)
+                    if (!isTopScoresFound())
                     {
                         InitalStandardDeviation++;
                         Console.WriteLine("Most Recent Score: " + score);

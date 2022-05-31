@@ -19,8 +19,31 @@ namespace HungerGames.Interface
         static List<int> IDs = new List<int>();
         static List<int> badIDs = new List<int>();
         static List<int> codes = new List<int>();
-        static int myHaresId = -1;
+        static List<int> myHaresId = new List<int>();
 
+        public override Turn ChooseTurn()
+        {
+            var animals = GetAnimalsSorted().ToList();
+            if (animals.Count > 0)
+            {
+                foreach (var ani in animals)
+                {
+                    //if (ani.GetType() == typeof(HungerGames.Animals.IntelligentHare<HungerGames.HareIntelligenceBraedenCullen>))
+                    //{
+                    //    Console.WriteLine("test");
+                    //}
+                    if (!ani.IsLynx && (ani.Species != 0 && ani.Species != 3))
+                    {
+                        Vector2D direction = ani.Position - Position;
+                        return ChangeVelocity(direction.UnitVector() * 4);
+                    }
+                }
+            }
+
+            return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
+        }
+
+        /*
         public override Turn ChooseTurn()
         {
             var animals = GetAnimalsSorted().ToList();
@@ -29,10 +52,26 @@ namespace HungerGames.Interface
                 var sounds = Listen().ToList();
                 if (sounds.Count > 0 && sounds[0].SoundCode == 192)
                 {
-                    Console.WriteLine(myHaresId);
-                    if (myHaresId == -1)
+                    //Console.WriteLine(myHaresId);
+                    if (myHaresId.Count < 1)
                     {
-                        myHaresId = animals[0].Species;
+                        foreach(var ani in animals)
+                        {
+                            Console.WriteLine("run thru: " + ani.Species);
+                            if(ani.IsLynx == false)
+                            {
+                                if(myHaresId.Contains(ani.Species))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    myHaresId.Add(ani.Species);
+                                    Console.WriteLine("added: " + (ani.Species));
+                                }
+                                break;
+                            }
+                        }
                     }
                     IDs.Add(animals[0].ID);
                     //badIDs.Remove(ani.ID);
@@ -61,19 +100,20 @@ namespace HungerGames.Interface
                             return ChangeVelocity(direction.UnitVector() * 4);
                         }
                     }*/
+        /*
                     if (!ani.IsLynx)
                     {
-                        if(ani.Species == myHaresId)
+                        if(myHaresId.Contains(ani.Species))
                         {
                             continue;
                         }
                         else
                         {
                             Vector2D direction = ani.Position - Position;
-                            double distance = Vector2D.Distance2(ani.Position, Position);
-                            if (distance < 3 && myHaresId == -1)
+                            double distance = Math.Sqrt(Vector2D.Distance2(ani.Position, Position));
+                            if (distance < 1 && myHaresId.Count < 1) //  && myHaresId == -1
                             {
-                                return Vocalize(10, 191);
+                                return Vocalize(5, 191);
                             }
                             else
                             {
@@ -86,6 +126,7 @@ namespace HungerGames.Interface
             }
             return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
         }
+        */
     }
 }
 
