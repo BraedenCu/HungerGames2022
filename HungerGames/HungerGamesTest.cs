@@ -150,8 +150,8 @@ namespace HungerGames
             }*/
         }
 
-        const int numberOfTopPerceptronsToStore = 5;
-        const int maxRunTime = 4000;
+        const int numberOfTopPerceptronsToStore = 1;
+        const int maxRunTime = 2000;
         static Perceptron[] topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
         static double[] bestTimes = new double[numberOfTopPerceptronsToStore];
 

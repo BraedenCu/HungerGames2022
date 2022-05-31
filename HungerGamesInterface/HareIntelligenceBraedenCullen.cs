@@ -35,7 +35,7 @@ namespace HungerGames
             var animals = GetAnimalsSorted().ToList();
             //TODO defect check animals not null
             VisibleAnimal nearestLynx = animals[0];
-            /*
+            
             bool lynxFound = false;
             foreach (var ani in animals)
             {
@@ -50,8 +50,12 @@ namespace HungerGames
                 //nearestLynx = null;
                 return Wait();
             }
-            */
-
+            double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
+            var sounds = Listen().ToList();
+            if (sounds[0].SoundCode == 192)
+            {
+                return Vocalize(1, 192);
+            }
 
             Perceptron.Reset();
             //position of current hare
@@ -124,16 +128,19 @@ namespace HungerGames
 
         public Turn DefaultMovementAwayFromLynx()
         {
-            const double distanceLimit2 = 10; //default 25 5
+            const double distanceLimit2 = 40; //default 25 5
 
             var animals = GetAnimalsSorted().ToList();
             foreach (var ani in animals)
             {
                 if (ani.IsLynx && Vector2D.Distance2(Position, ani.Position) < distanceLimit2)
-                {
+                { 
                     Vector2D direction = ani.Position - Position;
                     double distance = Vector2D.Distance2(ani.Position, Position);
-                    double velocity = 10 / (distance / 2);
+                    double velocity = 10 / (distance / 3);
+                    //return Vocalize(5, 10);
+                    //TODO -> make a new perceptron for velocity (copy the one from homework nine) that takes in the position of nearest lynx and current hare and outputs x and y velocity
+                    //TODO -> hardcode so hares never go to walls
                     //Console.WriteLine("Distance: " + distance + "  velocity: " + velocity);
                     return ChangeVelocity(-direction * velocity); //default 5 
                 }
