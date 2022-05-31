@@ -24,18 +24,18 @@ namespace HungerGames.Interface
             var animals = GetAnimalsSorted().ToList();
             if (animals.Count > 0)
             {
+                var sounds = Listen().ToList();
+                if (sounds.Count > 0 && sounds[0].SoundCode == 192)
+                {
+                    IDs.Add(animals[0].ID);
+                    //badIDs.Remove(ani.ID);
+                }
                 foreach (var ani in animals)
                 {
-                    if(!IDs.Contains(ani.ID))
+                    if (!IDs.Contains(ani.ID))
                     {
                         if (!ani.IsLynx)
                         {
-                            var sounds = Listen().ToList();
-                            if (sounds[0].SoundCode == 192)
-                            {
-                                IDs.Add(ani.ID);
-                                //badIDs.Remove(ani.ID);
-                            }
                             Vector2D direction = ani.Position - Position;
                             double distance = Vector2D.Distance2(ani.Position, Position);
 
@@ -43,9 +43,9 @@ namespace HungerGames.Interface
                             {
                                 return ChangeVelocity(direction.UnitVector() * 4);
                             }
-                            else if (distance < 1 && !badIDs.Contains(ani.ID))
+                            else if (distance < 6 && !badIDs.Contains(ani.ID))
                             {
-                                return Vocalize(3, 192);
+                                return Vocalize(6, 192);
                                 badIDs.Add(ani.ID);
                             }
 

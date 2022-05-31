@@ -42,6 +42,7 @@ namespace HungerGames
             lock (locker)
             {
                 var type = intel.GetType();
+                //Console.WriteLine(type);
                 if (!speciesCodes.ContainsKey(type))
                 {
                     AddSpeciesCode(type, speciesCodeCounter++);

@@ -53,9 +53,9 @@ namespace HungerGames
 
             double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
             var sounds = Listen().ToList();
-            if (sounds[0].SoundCode == 192)
+            if (sounds.Count > 0 && sounds[0].SoundCode == 192)
             {
-                return Vocalize(3, 192);
+                return Vocalize(10, 192);
             }
 
             Perceptron.Reset();
