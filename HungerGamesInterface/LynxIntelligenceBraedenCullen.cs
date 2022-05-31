@@ -43,9 +43,9 @@ namespace HungerGames.Interface
                             {
                                 return ChangeVelocity(direction.UnitVector() * 4);
                             }
-                            else if (distance < 1 || !badIDs.Contains(ani.ID))
+                            else if (distance < 1 && !badIDs.Contains(ani.ID))
                             {
-                                return Vocalize(1, 192);
+                                return Vocalize(3, 192);
                                 badIDs.Add(ani.ID);
                             }
 
