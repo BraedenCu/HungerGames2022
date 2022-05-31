@@ -12,6 +12,7 @@ namespace HungerGames.Interface
 {
     public class LynxIntelligenceBraedenCullen : LynxIntelligence
     {
+        public static int spiciesId = -1;
         public override Color Color { get { return Color.Black; } }
         public override string Name { get { return "MyLynx"; } }
         public override string BitmapFilename { get { return "default.png"; } }
@@ -21,7 +22,7 @@ namespace HungerGames.Interface
         static List<int> codes = new List<int>();
         static List<int> myHaresId = new List<int>();
 
-        public override Turn ChooseTurn()
+        /*public override Turn ChooseTurn()
         {
             var animals = GetAnimalsSorted().ToList();
             if (animals.Count > 0)
@@ -41,92 +42,57 @@ namespace HungerGames.Interface
             }
 
             return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
-        }
+        }*/
 
-        /*
+        
         public override Turn ChooseTurn()
         {
+
+            //TODO there is no perceptron for Lynx
             var animals = GetAnimalsSorted().ToList();
             if (animals.Count > 0)
             {
-                var sounds = Listen().ToList();
-                if (sounds.Count > 0 && sounds[0].SoundCode == 192)
+                var sounds = Listen().ToList();//not sure if needed
+                if (sounds.Count > 0 && sounds[0].SoundCode == HareIntelligenceBraedenCullen.voice)
                 {
-                    //Console.WriteLine(myHaresId);
-                    if (myHaresId.Count < 1)
-                    {
-                        foreach(var ani in animals)
-                        {
-                            Console.WriteLine("run thru: " + ani.Species);
-                            if(ani.IsLynx == false)
-                            {
-                                if(myHaresId.Contains(ani.Species))
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    myHaresId.Add(ani.Species);
-                                    Console.WriteLine("added: " + (ani.Species));
-                                }
-                                break;
-                            }
+                    if(!animals[0].IsLynx){
+                        double distance = Vector2D.Distance2(animals[0].Position, Position);
+                        if(distance<HareIntelligenceBraedenCullen.soundDistance){//should be close enough or probably false positive
+                        //if(sounds[0].Magnitude>.0004){
+                            HareIntelligenceBraedenCullen.spiciesId = animals[0].Species;
+                            Console.WriteLine("Hare Species Found:"+HareIntelligenceBraedenCullen.spiciesId);
                         }
                     }
-                    IDs.Add(animals[0].ID);
-                    //badIDs.Remove(ani.ID);
                 }
 
-                foreach (var ani in animals)
-                {
-                    /*
-                    if (!IDs.Contains(ani.ID))
-                    {
-                        if (!ani.IsLynx)
-                        {
-                            Vector2D direction = ani.Position - Position;
-                            double distance = Vector2D.Distance2(ani.Position, Position);
+            }
 
-                            if (badIDs.Contains(ani.ID))
-                            {
-                                return ChangeVelocity(direction.UnitVector() * 4);
-                            }
-                            else if (distance < 6 && !badIDs.Contains(ani.ID))
-                            {
-                                return Vocalize(6, 192);
-                                badIDs.Add(ani.ID);
-                            }
+            foreach(var ani in animals){
+                if(!ani.IsLynx){//is hare
+                    Vector2D direction = ani.Position - Position;
+                    double distance = Vector2D.Distance2(ani.Position, Position);
+                    if(HareIntelligenceBraedenCullen.spiciesId !=-1 && ani.Species!=HareIntelligenceBraedenCullen.spiciesId){
+                        return ChangeVelocity(direction.UnitVector()*4);//attach it
+                    }
+                    
+                    double soundDistance = HareIntelligenceBraedenCullen.soundDistance;
+                    if (HareIntelligenceBraedenCullen.spiciesId==-1 && distance < soundDistance){
+                        return Vocalize(soundDistance, 192);
+                    }
 
-                            return ChangeVelocity(direction.UnitVector() * 4);
-                        }
-                    }*/
-        /*
-                    if (!ani.IsLynx)
-                    {
-                        if(myHaresId.Contains(ani.Species))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            Vector2D direction = ani.Position - Position;
-                            double distance = Math.Sqrt(Vector2D.Distance2(ani.Position, Position));
-                            if (distance < 1 && myHaresId.Count < 1) //  && myHaresId == -1
-                            {
-                                return Vocalize(5, 191);
-                            }
-                            else
-                            {
-                                return ChangeVelocity(direction.UnitVector() * 4);
-                            }
-                        }
-                        //return ChangeVelocity(direction.UnitVector() * 4);
+                    if(HareIntelligenceBraedenCullen.spiciesId ==-1){ //i dont know the species yet
+                        return ChangeVelocity(direction.UnitVector()*4); //move towards it
+                    }
+
+                    if(HareIntelligenceBraedenCullen.spiciesId == ani.Species){//My hare move away
+                        return ChangeVelocity(direction.UnitVector()*-4);
                     }
                 }
+
             }
             return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
-        }
-        */
+        
+       }
     }
 }
 

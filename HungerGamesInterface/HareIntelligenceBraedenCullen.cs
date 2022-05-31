@@ -13,6 +13,7 @@ namespace HungerGames
 {
     public class HareIntelligenceBraedenCullen : HareIntelligence
     {
+        public static int spiciesId = -1;
         public override Color Color { get { return Color.RosyBrown; } }
         public override string Name { get { return "MyHares"; } }
         public override string BitmapFilename { get { return "pink.png"; } }
@@ -29,24 +30,31 @@ namespace HungerGames
             return ChangeVelocity(Vector2D.PolarVector(1, Random.NextDouble(0, 2 * Math.PI)));
         }
         */
+        public const int voice = 192;
+        public const double soundDistance = .5;//Used by sound generator in Lynx and elsewhere
 
         public override Turn ChooseTurn()
         {
             var animals = GetAnimalsSorted().ToList();
             //TODO defect check animals not null
-            VisibleAnimal nearestLynx = animals[0];
-            double distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
+            double distanceToNearestLynx = 10000; //bogus number
+            
+            VisibleAnimal nearestLynx = null;
+            if(animals.Count()>1){
+                nearestLynx = animals[0];
+                distanceToNearestLynx = Vector2D.Distance2(nearestLynx.Position, Position);
+            }
             var sounds = Listen().ToList();
             if (sounds.Count > 0 && sounds[0].SoundCode == 191)
             {
                 //Console.WriteLine("vocalizing");
-                return Vocalize(5, 192);
+                return Vocalize(soundDistance, 192);
             }
 
             bool lynxFound = false;
             foreach (var ani in animals)
             {
-                if (ani.IsLynx == true)
+                if (ani.IsLynx == true && nearestLynx is not null)
                 {
                     lynxFound = true;
                     nearestLynx = ani;
@@ -130,7 +138,7 @@ namespace HungerGames
 
         public Turn DefaultMovementAwayFromLynx()
         {
-            const double distanceLimit2 = 40; //default 25 5
+            const double distanceLimit2 = 25; //default 25 5
 
             var animals = GetAnimalsSorted().ToList();
             foreach (var ani in animals)

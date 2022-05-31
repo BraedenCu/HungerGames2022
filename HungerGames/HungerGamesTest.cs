@@ -151,7 +151,7 @@ namespace HungerGames
         }
 
         const int numberOfTopPerceptronsToStore = 1;
-        const int maxRunTime = 15000;
+        const int maxRunTime = 5000;
         static Perceptron[] topPreceptrons = new Perceptron[numberOfTopPerceptronsToStore];
         static double[] bestTimes = new double[numberOfTopPerceptronsToStore];
 
@@ -188,7 +188,7 @@ namespace HungerGames
                 
                 UpdateBestPerceptronsGreatThen(newPerceptron, score);
                 //TODO change this to a different situation so its not just returning the first thing it finds
-                return topPreceptrons[0];
+                //return topPreceptrons[0];
 
                 if (i == numberOfTrainingRuns - 1)
                 {
@@ -246,6 +246,7 @@ namespace HungerGames
 
         static private double RunArenaHare(HungerGamesArena arena, Perceptron newPerceptronToRun)
         {
+            HareIntelligenceBraedenCullen.spiciesId = -1;
             return RunArenaHareMaximize(arena, newPerceptronToRun, bestLynxPerceptron, maxRunTime);
         }
         static private double RunArena(HungerGamesArena arena, Perceptron harePerceptron, Perceptron lynxPerceptron)
@@ -348,6 +349,7 @@ namespace HungerGames
                 arena.Tick(arena.Time + 1);
             }
 
+            Console.WriteLine("**Final: Time:"+arena.Time + "\t My Hares:"+myHares.Count() + "\t Default Hares:" + arena.GetObjects("Default Hare").Count());
             if (arena.GetObjects("Default Hare").Count() > myHares.Count())
             {
                 Console.WriteLine("Time before discarding:  " + arena.Time);
